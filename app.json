@@ -1,0 +1,49 @@
+{
+  "expo": {
+    "name": "Padel-per-Tutti",
+    "slug": "Padel-per-Tutti",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-updates",
+        {
+          "username": "pablobertini"
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "df92efaf-9a0c-48aa-93c7-f2d1bcf030f1"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/df92efaf-9a0c-48aa-93c7-f2d1bcf030f1"
+    }
+  }
+}
