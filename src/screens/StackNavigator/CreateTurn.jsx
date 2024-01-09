@@ -6,6 +6,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -65,8 +66,7 @@ export const CreateTurn = ({ navigation }) => {
         newTurn(
           formik.values.lugar,
           formik.values.categoria,
-          formik.values.tipoCancha,
-          formik.values.categoria
+          formik.values.tipoCancha
         );
       } catch (error) {
         console.error(error);
@@ -115,171 +115,139 @@ export const CreateTurn = ({ navigation }) => {
 
   return (
     <>
-      <SafeAreaView style={stylesGral.safeAreaView}>
-        <View style={styles.container}>
-          <View>
-            <Text style={styles.text}>Crear nuevo turno</Text>
-          </View>
-          <View style={styles.containerInputs}>
-            <View>
-              <Text style={styles.label}>Lugar del turno</Text>
-              <TextInput
-                style={stylesGral.input}
-                name="lugar"
-                placeholder="Ingrese el lugar del turno"
-                placeholderTextColor="grey"
-                autoComplete="name"
-                onChangeText={(value) => formik.setFieldValue("lugar", value)}
-              />
-              {formik.errors.lugar && (
-                <CustumErrorInput message={formik.errors.lugar} />
-              )}
-            </View>
-            <View>
-              <Text style={styles.label}>Fecha del turno</Text>
-              <TouchableOpacity
-                style={stylesGral.input}
-                onPress={showDatePicker}
-              >
-                {selectedDate && (
-                  <Text>{selectedDate.toLocaleDateString("es-Arg")}</Text>
-                )}
-                <DateTimePickerModal
-                  isVisible={isDatePickerVisible}
-                  value={selectedDate}
-                  mode="date"
-                  onConfirm={handleDateConfirm}
-                  onCancel={hideDatePicker}
-                  onChange={(value) => formik.setFieldValue("fecha", value)}
+      <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
+        <ScrollView>
+          <Text style={styles.text}>Crear nuevo turno</Text>
+          <View style={{ flex: 1 }}>
+            <View style={styles.containerInputs}>
+              <View>
+                <Text style={styles.label}>Lugar del turno</Text>
+                <TextInput
+                  style={stylesGral.input}
+                  name="lugar"
+                  placeholder="Ingrese el lugar del turno"
+                  placeholderTextColor="grey"
+                  autoComplete="name"
+                  onChangeText={(value) => formik.setFieldValue("lugar", value)}
                 />
-              </TouchableOpacity>
-            </View>
-            <View>
-              <Text style={styles.label}>Hora de inicio del turno</Text>
-              <TouchableOpacity
-                style={stylesGral.input}
-                onPress={showStartTimePicker}
-              >
-                {selectedStartTime && (
-                  <Text>
-                    {selectedStartTime.toLocaleTimeString("es-Arg", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </Text>
+                {formik.errors.lugar && (
+                  <CustumErrorInput message={formik.errors.lugar} />
                 )}
-                <DateTimePickerModal
-                  isVisible={isStartTimePickerVisible}
-                  value={selectedStartTime}
-                  mode="time"
-                  display="spinner"
-                  onConfirm={handleStartTimeConfirm}
-                  onCancel={hideStartTimePicker}
-                  onChange={(value) =>
-                    formik.setFieldValue("horaInicio", value)
+              </View>
+              <View>
+                <Text style={styles.label}>Fecha del turno</Text>
+                <TouchableOpacity
+                  style={stylesGral.input}
+                  onPress={showDatePicker}
+                >
+                  {selectedDate && (
+                    <Text>{selectedDate.toLocaleDateString("es-Arg")}</Text>
+                  )}
+                  <DateTimePickerModal
+                    isVisible={isDatePickerVisible}
+                    value={selectedDate}
+                    mode="date"
+                    onConfirm={handleDateConfirm}
+                    onCancel={hideDatePicker}
+                    onChange={(value) => formik.setFieldValue("fecha", value)}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View>
+                <Text style={styles.label}>Hora de inicio del turno</Text>
+                <TouchableOpacity
+                  style={stylesGral.input}
+                  onPress={showStartTimePicker}
+                >
+                  {selectedStartTime && (
+                    <Text>
+                      {selectedStartTime.toLocaleTimeString("es-Arg", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </Text>
+                  )}
+                  <DateTimePickerModal
+                    isVisible={isStartTimePickerVisible}
+                    value={selectedStartTime}
+                    mode="time"
+                    display="spinner"
+                    onConfirm={handleStartTimeConfirm}
+                    onCancel={hideStartTimePicker}
+                    onChange={(value) =>
+                      formik.setFieldValue("horaInicio", value)
+                    }
+                  />
+                </TouchableOpacity>
+              </View>
+              <View>
+                <Text style={styles.label}>Hora de finalizacion del turno</Text>
+                <TouchableOpacity
+                  style={stylesGral.input}
+                  onPress={showEndTimePicker}
+                >
+                  {selectedEndTime && (
+                    <Text>
+                      {selectedEndTime.toLocaleTimeString("es-Arg", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </Text>
+                  )}
+                  <DateTimePickerModal
+                    isVisible={isEndTimePickerVisible}
+                    value={selectedEndTime}
+                    mode="time"
+                    display="spinner"
+                    onConfirm={handleEndTimeConfirm}
+                    onCancel={hideEndTimePicker}
+                    onChange={(value) => formik.setFieldValue("horaFin", value)}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View>
+                <Text style={styles.label}>Categoria de los jugadores</Text>
+                <TextInput
+                  style={stylesGral.input}
+                  name="categoria"
+                  placeholder="Ingrese la categoria de los jugadores del turno"
+                  placeholderTextColor="grey"
+                  onChangeText={(value) =>
+                    formik.setFieldValue("categoria", value)
                   }
                 />
-              </TouchableOpacity>
-            </View>
-            <View>
-              <Text style={styles.label}>Hora de finalizacion del turno</Text>
-              <TouchableOpacity
-                style={stylesGral.input}
-                onPress={showEndTimePicker}
-              >
-                {selectedEndTime && (
-                  <Text>
-                    {selectedEndTime.toLocaleTimeString("es-Arg", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </Text>
+                {formik.errors.categoria && (
+                  <CustumErrorInput message={formik.errors.categoria} />
                 )}
-                <DateTimePickerModal
-                  isVisible={isEndTimePickerVisible}
-                  value={selectedEndTime}
-                  mode="time"
-                  display="spinner"
-                  onConfirm={handleEndTimeConfirm}
-                  onCancel={hideEndTimePicker}
-                  onChange={(value) => formik.setFieldValue("horaFin", value)}
+              </View>
+              <View>
+                <Text style={styles.label}>Ingrese el tipo de cancha</Text>
+                <TextInput
+                  style={stylesGral.input}
+                  name="tipoCancha"
+                  placeholder="Cesped o Cemento"
+                  placeholderTextColor="grey"
+                  onChangeText={(value) =>
+                    formik.setFieldValue(
+                      "tipoCancha",
+                      value
+                        .toUpperCase()
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "")
+                    )
+                  }
                 />
-              </TouchableOpacity>
+                {formik.errors.tipoCancha && (
+                  <CustumErrorInput message={formik.errors.tipoCancha} />
+                )}
+              </View>
             </View>
-            <View>
-              <Text style={styles.label}>Categoria de los jugadores</Text>
-              <TextInput
-                style={stylesGral.input}
-                name="categoria"
-                placeholder="Ingrese la categoria de los jugadores del turno"
-                placeholderTextColor="grey"
-                onChangeText={(value) =>
-                  formik.setFieldValue("categoria", value)
-                }
-              />
-              {formik.errors.categoria && (
-                <CustumErrorInput message={formik.errors.categoria} />
-              )}
-            </View>
-            <View>
-              <Text style={styles.label}>Ingrese el tipo de cancha</Text>
-              <TextInput
-                style={stylesGral.input}
-                name="tipoCancha"
-                placeholder="Cesped o Cemento"
-                placeholderTextColor="grey"
-                onChangeText={(value) =>
-                  formik.setFieldValue(
-                    "tipoCancha",
-                    value
-                      .toUpperCase()
-                      .normalize("NFD")
-                      .replace(/[\u0300-\u036f]/g, "")
-                  )
-                }
-              />
-              {formik.errors.tipoCancha && (
-                <CustumErrorInput message={formik.errors.tipoCancha} />
-              )}
-            </View>
+          </View>
+          <View style={{ flex: 1 }}>
             <View style={styles.button}>
               <Button
                 title="Crear turno"
-                onPress={() => {
-                  const categoriaValue = formik.values.categoria;
-                  console.log(
-                    "Valor de categoria antes de la conversión:",
-                    categoriaValue
-                  );
-                  // Intenta convertir el valor a número
-                  const categoriaNumero = parseInt(categoriaValue, 10);
-
-                  console.log(
-                    "Tipo de categoria después de la conversión:",
-                    typeof categoriaNumero
-                  );
-
-                  console.log(
-                    "Valor de categoria después de la conversión:",
-                    categoriaNumero
-                  );
-                  // Verifica si la conversión fue exitosa y está en el rango válido
-                  if (
-                    !isNaN(categoriaNumero) &&
-                    categoriaNumero >= 1 &&
-                    categoriaNumero <= 8
-                  ) {
-                    // Actualiza el valor de categoría en el objeto formik
-                    formik.setFieldValue("categoria", categoriaNumero);
-
-                    // Continúa con el envío del formulario
-                    formik.handleSubmit();
-                  } else {
-                    console.error(
-                      "La categoría no es un número válido o no está en el rango permitido (1-8)"
-                    );
-                  }
-                }}
+                onPress={() => formik.handleSubmit()}
               />
             </View>
             <View>
@@ -293,7 +261,7 @@ export const CreateTurn = ({ navigation }) => {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </ScrollView>
       </SafeAreaView>
       <CustomModalSucces
         activeModal={activeModal}
@@ -316,16 +284,18 @@ const styles = StyleSheet.create({
   },
   containerInputs: {
     flex: 1,
-    marginTop: 40,
+    marginTop: 10,
     marginLeft: 12,
     marginRight: 12,
   },
   text: {
     fontSize: 20,
     color: "white",
+
+    backgroundColor: "black",
     fontWeight: "bold",
     alignSelf: "center",
-    margin: 20,
+    margin: 1,
   },
   label: {
     marginLeft: 12,
