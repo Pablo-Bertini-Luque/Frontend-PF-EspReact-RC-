@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { stylesGral } from "../../css/Theme";
@@ -21,13 +20,50 @@ import { TurnsContext } from "../../contexts/TurnsContext";
 import { CustomLoading } from "../../components/CustomLoading";
 
 export const CreateTurn = ({ navigation }) => {
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [isStartTimePickerVisible, setStartTimePickerVisibility] =
-    useState(false);
-  const [isEndTimePickerVisible, setEndTimePickerVisibility] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedStartTime, setSelectedStartTime] = useState(null);
-  const [selectedEndTime, setSelectedEndTime] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(new Date());
+  const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
+  const [selectedTimeEnd, setSelectedTimeEnd] = useState(new Date());
+  const [isTimeEndPickerVisible, setTimeEndPickerVisibility] = useState(false);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleDateConfirm = (date) => {
+    setSelectedDate(new Date(date));
+    hideDatePicker();
+  };
+
+  const showTimePicker = () => {
+    setTimePickerVisibility(true);
+  };
+
+  const hideTimePicker = () => {
+    setTimePickerVisibility(false);
+  };
+
+  const handleTimeConfirm = (time) => {
+    setSelectedTime(time);
+    hideTimePicker();
+  };
+
+  const showTimeEndPicker = () => {
+    setTimeEndPickerVisibility(true);
+  };
+
+  const hideTimeEndPicker = () => {
+    setTimeEndPickerVisibility(false);
+  };
+
+  const handleTimeEndConfirm = (time) => {
+    setSelectedTimeEnd(time);
+    hideTimeEndPicker();
+  };
 
   const {
     state,
@@ -42,16 +78,21 @@ export const CreateTurn = ({ navigation }) => {
   const formik = useFormik({
     initialValues: {
       lugar: "",
-      categoria: 1,
+      fecha: selectedDate,
+      horaInicio: selectedTime,
+      horaFin: selectedTimeEnd,
+      categoria: "",
       tipoCancha: "",
-      fecha: "",
-      horaInicio: "",
-      horaFin: "",
     },
     validationSchema: Yup.object({
       lugar: Yup.string()
         .required("El nombre del lugar de juego es obligatorio")
         .min(5, "El nombre debe tener un mínimo de 5 caracteres"),
+      fecha: Yup.date().required("Debe seleccionar la fecha del turno"),
+      horaInicio: Yup.date().required(
+        "Debe seleccionar la hora de inicio del turno"
+      ),
+      horaFin: Yup.date().required("Debe seleccionar la hora de fin del turno"),
       categoria: Yup.number()
         .required("La categoria es obligatoria. Ingrese un numero del 1 al 8")
         .min(1, "La categoria mínima es 1")
@@ -62,9 +103,30 @@ export const CreateTurn = ({ navigation }) => {
     onSubmit: (values) => {
       console.log("Ingresa al onSubmit");
 
+      const formattedDate = selectedDate.toLocaleDateString("es-AR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+
+      const formatteTimeInit = selectedTime.toLocaleTimeString("es-AR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+      const formatteTimeEnd = selectedTimeEnd.toLocaleTimeString("es-AR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+      const fechaYHora = `Fecha: ${formattedDate} \n\nHora: ${formatteTimeInit} a ${formatteTimeEnd}`;
+
+      console.log(fechaYHora);
+
       try {
         newTurn(
           formik.values.lugar,
+          fechaYHora,
           formik.values.categoria,
           formik.values.tipoCancha
         );
@@ -73,45 +135,6 @@ export const CreateTurn = ({ navigation }) => {
       }
     },
   });
-
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleDateConfirm = (date) => {
-    setSelectedDate(date);
-    hideDatePicker();
-  };
-
-  const showStartTimePicker = () => {
-    setStartTimePickerVisibility(true);
-  };
-
-  const hideStartTimePicker = () => {
-    setStartTimePickerVisibility(false);
-  };
-
-  const handleStartTimeConfirm = (time) => {
-    setSelectedStartTime(time);
-    hideStartTimePicker();
-  };
-
-  const showEndTimePicker = () => {
-    setEndTimePickerVisibility(true);
-  };
-
-  const hideEndTimePicker = () => {
-    setEndTimePickerVisibility(false);
-  };
-
-  const handleEndTimeConfirm = (time) => {
-    setSelectedEndTime(time);
-    hideEndTimePicker();
-  };
 
   return (
     <>
@@ -146,75 +169,101 @@ export const CreateTurn = ({ navigation }) => {
                   <DateTimePickerModal
                     isVisible={isDatePickerVisible}
                     value={selectedDate}
+                    name="fecha"
+                    display="calendar"
                     mode="date"
-                    onConfirm={handleDateConfirm}
+                    onConfirm={(date) => {
+                      handleDateConfirm(date);
+                      formik.setFieldValue("fecha", date);
+                    }}
                     onCancel={hideDatePicker}
-                    onChange={(value) => formik.setFieldValue("fecha", value)}
                   />
                 </TouchableOpacity>
+                {formik.errors.fecha && (
+                  <CustumErrorInput message={formik.errors.fecha} />
+                )}
               </View>
               <View>
-                <Text style={styles.label}>Hora de inicio del turno</Text>
+                <Text style={styles.label}>Hora Inicio del turno</Text>
                 <TouchableOpacity
                   style={stylesGral.input}
-                  onPress={showStartTimePicker}
+                  onPress={showTimePicker}
                 >
-                  {selectedStartTime && (
+                  {selectedTime && (
                     <Text>
-                      {selectedStartTime.toLocaleTimeString("es-Arg", {
+                      {selectedTime.toLocaleTimeString("es-AR", {
                         hour: "2-digit",
                         minute: "2-digit",
                       })}
                     </Text>
                   )}
                   <DateTimePickerModal
-                    isVisible={isStartTimePickerVisible}
-                    value={selectedStartTime}
+                    isVisible={isTimePickerVisible}
+                    value={selectedTime}
+                    name="horaInicio"
                     mode="time"
                     display="spinner"
-                    onConfirm={handleStartTimeConfirm}
-                    onCancel={hideStartTimePicker}
-                    onChange={(value) =>
-                      formik.setFieldValue("horaInicio", value)
-                    }
+                    onConfirm={handleTimeConfirm}
+                    onCancel={hideTimePicker}
+                    onChange={(value) => {
+                      const selected = new Date(value.nativeEvent.timestamp);
+                      setSelectedTime(selected);
+                      formik.setFieldValue("horaInicio", selected); // Actualiza el valor de hora en formik
+                    }}
                   />
                 </TouchableOpacity>
+                {formik.errors.horaInicio && (
+                  <CustumErrorInput message={formik.errors.horaInicio} />
+                )}
               </View>
               <View>
-                <Text style={styles.label}>Hora de finalizacion del turno</Text>
+                <Text style={styles.label}>Hora fin del turno</Text>
                 <TouchableOpacity
                   style={stylesGral.input}
-                  onPress={showEndTimePicker}
+                  onPress={showTimeEndPicker}
                 >
-                  {selectedEndTime && (
+                  {selectedTime && (
                     <Text>
-                      {selectedEndTime.toLocaleTimeString("es-Arg", {
+                      {selectedTimeEnd.toLocaleTimeString("es-AR", {
                         hour: "2-digit",
                         minute: "2-digit",
                       })}
                     </Text>
                   )}
                   <DateTimePickerModal
-                    isVisible={isEndTimePickerVisible}
-                    value={selectedEndTime}
+                    isVisible={isTimeEndPickerVisible}
+                    value={selectedTimeEnd}
+                    name="horaFin"
                     mode="time"
                     display="spinner"
-                    onConfirm={handleEndTimeConfirm}
-                    onCancel={hideEndTimePicker}
-                    onChange={(value) => formik.setFieldValue("horaFin", value)}
+                    onConfirm={handleTimeEndConfirm}
+                    onCancel={hideTimeEndPicker}
+                    onChange={(value) => {
+                      const selected = new Date(value.nativeEvent.timestamp);
+                      setSelectedTimeEnd(selected);
+                      formik.setFieldValue("horaFin", selected); // Actualiza el valor de hora en formik
+                    }}
                   />
                 </TouchableOpacity>
+                {formik.errors.horaFin && (
+                  <CustumErrorInput message={formik.errors.horaFin} />
+                )}
               </View>
+
               <View>
                 <Text style={styles.label}>Categoria de los jugadores</Text>
                 <TextInput
                   style={stylesGral.input}
                   name="categoria"
+                  keyboardType="numeric"
                   placeholder="Ingrese la categoria de los jugadores del turno"
                   placeholderTextColor="grey"
-                  onChangeText={(value) =>
-                    formik.setFieldValue("categoria", value)
-                  }
+                  onChangeText={(value) => {
+                    const numericValue = parseInt(value, 10);
+                    if (!isNaN(numericValue)) {
+                      formik.setFieldValue("categoria", numericValue);
+                    }
+                  }}
                 />
                 {formik.errors.categoria && (
                   <CustumErrorInput message={formik.errors.categoria} />
@@ -234,6 +283,7 @@ export const CreateTurn = ({ navigation }) => {
                         .toUpperCase()
                         .normalize("NFD")
                         .replace(/[\u0300-\u036f]/g, "")
+                        .trim()
                     )
                   }
                 />
@@ -244,21 +294,24 @@ export const CreateTurn = ({ navigation }) => {
             </View>
           </View>
           <View style={{ flex: 1 }}>
-            <View style={styles.button}>
-              <Button
-                title="Crear turno"
-                onPress={() => formik.handleSubmit()}
-              />
-            </View>
             <View>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => navigation.goBack()}
-              >
-                <Text style={{ color: "white", textAlign: "center" }}>
-                  VOLVER A INICIO
-                </Text>
-              </TouchableOpacity>
+              <View style={styles.button}>
+                <Button
+                  title="Crear turno"
+                  onPress={formik.handleSubmit}
+                  disabled={formik.isSubmitting}
+                />
+              </View>
+              <View>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => navigation.goBack()}
+                >
+                  <Text style={{ color: "white", textAlign: "center" }}>
+                    VOLVER A INICIO
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </ScrollView>

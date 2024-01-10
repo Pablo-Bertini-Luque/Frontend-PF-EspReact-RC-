@@ -50,6 +50,8 @@ export const InfoTurn = ({ route, navigation }) => {
     return <CustomLoading />;
   }
 
+  console.log(detailsTurn);
+
   return (
     <>
       <SafeAreaView style={stylesGral.safeAreaView}>
@@ -65,8 +67,8 @@ export const InfoTurn = ({ route, navigation }) => {
               <Text style={styles.text}>
                 Lugar: {detailsTurn?.turno?.lugar || "N/A"}
               </Text>
-              <Text style={styles.text}>
-                Dia y Hora del turno: {detailsTurn?.turno?.hora || "N/A"}
+              <Text style={{ marginBottom: 15, height: 80, fontSize: 18 }}>
+                Dia del turno: {detailsTurn?.turno?.hora || "N/A"}
               </Text>
               <Text style={styles.text}>
                 Categoria de los jugadores:{" "}
@@ -138,7 +140,7 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    marginTop: 50,
+    marginTop: 120,
     alignItems: "center",
   },
 });
