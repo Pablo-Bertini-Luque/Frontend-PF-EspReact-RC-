@@ -24,12 +24,9 @@ QR Expo para acceder a la app desde IOS
 
 ![Expo Padel-Per-Tutti IOS](https://github.com/Pablo-Bertini-Luque/Frontend-PF-EspReact-RC-/assets/98782643/23e0d299-5818-47a8-8d5b-592e1343be44)
 
-
-
-
-
-
-
+</br>
+</br>
+</br>
 
 
 QR Expo para acceder a la app desde Android 
