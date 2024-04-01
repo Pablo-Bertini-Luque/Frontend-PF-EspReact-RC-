@@ -20,8 +20,12 @@ Link del repositorio de la API Rest del proyecto: https://github.com/Pablo-Berti
 <li>CSS</li>
 </ul>
 
-QR Expo para acceder a la app desde IOS ![Expo Padel-Per-Tutti IOS](https://github.com/Pablo-Bertini-Luque/Frontend-PF-EspReact-RC-/assets/98782643/23e0d299-5818-47a8-8d5b-592e1343be44)
-QR Expo para acceder a la app desde Android ![Expo Padel-Per-Tutti Android](https://github.com/Pablo-Bertini-Luque/Frontend-PF-EspReact-RC-/assets/98782643/e5730f55-664b-4785-b850-2f9a8517a00b)
+QR Expo para acceder a la app desde IOS 
+
+![Expo Padel-Per-Tutti IOS](https://github.com/Pablo-Bertini-Luque/Frontend-PF-EspReact-RC-/assets/98782643/23e0d299-5818-47a8-8d5b-592e1343be44)
+
+QR Expo para acceder a la app desde Android 
+![Expo Padel-Per-Tutti Android](https://github.com/Pablo-Bertini-Luque/Frontend-PF-EspReact-RC-/assets/98782643/e5730f55-664b-4785-b850-2f9a8517a00b)
 
 
 
